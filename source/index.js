@@ -1,60 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import getArticles from 'hacker-news-top-ten';
 
 import NewsFeed from './View/NewsFeed';
+import Loading from './Component/Loading';
+import Loadable from './View/Loadable';
 
 class Container extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { articles: [] };
+    this.state = { 
+      articles: [],
+      loaded: false
+    };
   }
 
   componentWillMount() {
-    setTimeout(() =>
-      this.setState({ articles: ARTICLES })
-    , 3000);
+    getArticles().then(articles => {
+      this.setState({ articles })
+    });
   }
 
   render() {
+    const LoadableNewsFeed = Loadable(NewsFeed);
     return (
-      <NewsFeed
-        articles={this.state.articles}
-      />
+      <div>
+        <LoadableNewsFeed articles={this.state.articles} />
+      </div>
     );
   }
 }
 
-
-const LOREM_IPSUM =
-  `
-  Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-  Lorem Ipsum has been the industry's standard dummy text ever since the
-  1500s, when an unknown printer took a galley of type and scrambled it to
-  make a type specimen book.
-  `
-
-const ARTICLES = [
-  {
-    description: LOREM_IPSUM,
-    id: 1,
-    link: 'https://google.com',
-    title: 'Article 1',
-  },
-  {
-    description: LOREM_IPSUM,
-    id: 2,
-    link: 'https://google.com',
-    title: 'Article 2',
-  },
-  {
-    description: LOREM_IPSUM,
-    id: 3,
-    link: 'https://google.com',
-    title: 'Article 3',
-  },
-];
-
-ReactDOM.render(
-  <Container
-  />
-, document.getElementById('root'));
+ReactDOM.render(<Container />, document.getElementById('root'));

@@ -6,7 +6,7 @@ export default function NewsFeed(props) {
     <Article
       description={article.description}
       key={article.id}
-      link={article.link}
+      link={article.url}
       title={article.title}
     />
   )
